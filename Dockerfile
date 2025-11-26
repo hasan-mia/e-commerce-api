@@ -16,12 +16,9 @@ RUN npm install
 # Copy the full app source code
 COPY . .
 
-# Create directories for file processing
-RUN mkdir -p /app/public/upload/video && \
-    chmod 755 /app/public/upload/video
 
-# Expose the port your app runs on (according to your .env it's likely 2323)
-EXPOSE 2323
+# Expose the port your app runs on (according to your .env it's likely 3535)
+EXPOSE 3535
 
 # Start the app
 CMD ["npm", "run", "start"]
