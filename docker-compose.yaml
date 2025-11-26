@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  express:
+    container_name: cpa-api
+    build:
+      context: .
+      dockerfile: Dockerfile # make sure your Dockerfile is at the root
+    ports:
+      - "8923:8923" # Assuming your app runs on port 8923 inside container

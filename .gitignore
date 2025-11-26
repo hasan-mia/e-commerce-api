@@ -1,0 +1,55 @@
+# Node.js dependencies
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Debugger files
+*.local
+
+# Sequelize migration files
+/sequelize-cli.log
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Coverage directory used by tools like istanbul or nyc to store coverage reports
+coverage
+
+# Build files
+/dist
+/build
+
+# Optional cache files
+.cache
+
+# IDE / Editor settings
+.vscode/
+.idea/
+
+# Temporary files and folders
+tmp/
+temp/
+
+
+# Ignore any sensitive JWT keys that might be generated for testing
+*.pem
+*.key
+
+# Logs from tests
+test-results/
+
+# Optional eslint cache
+.eslintcache
+
+.vercel
