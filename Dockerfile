@@ -21,4 +21,4 @@ COPY . .
 EXPOSE 3535
 
 # Start the app
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npm run migrate && npm run start"]
