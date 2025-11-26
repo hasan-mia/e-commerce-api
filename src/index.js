@@ -12,7 +12,7 @@ const seedDatabase = require("./scripts/seedDatabase");
 const { connectSocket } = require("./config/connectSocket");
 
 // =========== Server Setup ============
-const BASE_PORT = process.env.PORT || 4545;
+const BASE_PORT = process.env.PORT || 3535;
 const RESTART_DELAY = 3000;
 const MAX_RESTART_ATTEMPTS = 5;
 const FORCE_PORT_KILL = true;

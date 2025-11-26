@@ -3,15 +3,17 @@ const categoryRouter = express.Router();
 const { isAuthorized } = require("../middleware/auth");
 const {
   createCategory,
+  getAllCategories,
+  getCategoryById,
   updateCategory,
   deleteCategory,
-  getAllCategories,
 } = require("../controllers/categoryController");
 
 categoryRouter
   .post("/", isAuthorized("manage_categories"), createCategory)
   .get("/", getAllCategories)
-  .put("/:categoryId", isAuthorized("manage_categories"), updateCategory)
-  .delete("/:categoryId", isAuthorized("manage_categories"), deleteCategory);
+  .get("/:id", getCategoryById)
+  .put("/:id", isAuthorized("manage_categories"), updateCategory)
+  .delete("/:id", isAuthorized("manage_categories"), deleteCategory);
 
 module.exports = categoryRouter;
