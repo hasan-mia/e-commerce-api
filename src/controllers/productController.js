@@ -7,6 +7,8 @@ const {
   updateProduct,
   deleteProduct,
   updateStock,
+  getBestSellers,
+  getNewArrivals,
 } = require("../services/productService");
 
 // Create Product
@@ -95,6 +97,48 @@ exports.updateStock = catchAsyncError(async (req, res) => {
       operation
     );
     sendResponse(res, 202, true, "Stock updated successfully", data, true);
+  } catch (error) {
+    handleError(res, error);
+  }
+});
+
+// Get Best Sellers
+exports.getBestSellers = catchAsyncError(async (req, res) => {
+  try {
+    const filters = {
+      limit: parseInt(req.query.limit) || 10,
+    };
+
+    const data = await getBestSellers(filters);
+    sendResponse(
+      res,
+      200,
+      true,
+      "Best sellers fetched successfully",
+      data,
+      true
+    );
+  } catch (error) {
+    handleError(res, error);
+  }
+});
+
+// Get New Arrivals
+exports.getNewArrivals = catchAsyncError(async (req, res) => {
+  try {
+    const filters = {
+      limit: parseInt(req.query.limit) || 10,
+    };
+
+    const data = await getNewArrivals(filters);
+    sendResponse(
+      res,
+      200,
+      true,
+      "New arrivals fetched successfully",
+      data,
+      true
+    );
   } catch (error) {
     handleError(res, error);
   }

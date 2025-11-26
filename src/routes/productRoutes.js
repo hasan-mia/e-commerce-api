@@ -8,11 +8,15 @@ const {
   updateProduct,
   deleteProduct,
   updateStock,
+  getBestSellers,
+  getNewArrivals,
 } = require("../controllers/productController");
 
 productRouter
   .post("/", isAuthorized("manage_products"), createProduct)
   .get("/", getAllProducts)
+  .get("/best-sellers", getBestSellers)
+  .get("/new-arrivals", getNewArrivals)
   .get("/:id", getProductById)
   .put("/:id", isAuthorized("manage_products"), updateProduct)
   .delete("/:id", isAuthorized("manage_products"), deleteProduct)

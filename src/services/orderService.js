@@ -1,7 +1,13 @@
-const { Order, OrderItem, Product, User, Transaction } = require("../models");
+const {
+  Order,
+  OrderItem,
+  Product,
+  User,
+  Transaction,
+  sequelize,
+} = require("../models");
 const { ErrorHandler } = require("../utils/utils");
 const { Op } = require("sequelize");
-const sequelize = require("../config/database");
 
 // Create Order
 const createOrder = async (userId, data) => {

@@ -1,4 +1,4 @@
-const { Product, Category, OrderItem } = require("../models");
+const { Product, Category, OrderItem, sequelize } = require("../models");
 const { ErrorHandler } = require("../utils/utils");
 const { extractPublicIdFromUrl } = require("../utils/helper");
 const CloudinaryService = require("../utils/CloudinaryService");
@@ -358,6 +358,82 @@ const updateStock = async (productId, quantity, operation = "add") => {
   }
 };
 
+// Add these new functions to your productService.js
+
+// Get Best Sellers (based on order items count)
+const getBestSellers = async (filters = {}) => {
+  try {
+    const { limit = 10 } = filters;
+
+    const products = await Product.findAll({
+      attributes: [
+        "id",
+        "name",
+        "description",
+        "price",
+        "images",
+        "category_id",
+        "stock",
+        "rating",
+        "reviews",
+        "status",
+        "created_at",
+        "updated_at",
+        [
+          sequelize.literal(`(
+            SELECT COALESCE(SUM(quantity), 0)
+            FROM "OrderItems" AS oi
+            WHERE oi.product_id = "Product".id
+          )`),
+          "total_sold",
+        ],
+      ],
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: ["id", "name", "description", "image"],
+        },
+      ],
+      where: {
+        status: "active",
+      },
+      order: [[sequelize.literal("total_sold"), "DESC"]],
+      limit: parseInt(limit),
+    });
+
+    return products;
+  } catch (error) {
+    throw new ErrorHandler(error.message, error.statusCode || 500);
+  }
+};
+
+// Get New Arrivals (recently created products)
+const getNewArrivals = async (filters = {}) => {
+  try {
+    const { limit = 10 } = filters;
+
+    const products = await Product.findAll({
+      where: {
+        status: "active",
+      },
+      include: [
+        {
+          model: Category,
+          as: "category",
+          attributes: ["id", "name", "description", "image"],
+        },
+      ],
+      limit: parseInt(limit),
+      order: [["created_at", "DESC"]],
+    });
+
+    return products;
+  } catch (error) {
+    throw new ErrorHandler(error.message, error.statusCode || 500);
+  }
+};
+
 module.exports = {
   createProduct,
   getAllProducts,
@@ -365,4 +441,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   updateStock,
+  getBestSellers,
+  getNewArrivals,
 };

@@ -59,7 +59,7 @@ const createHero = async (data) => {
         {
           model: Product,
           as: "product",
-          attributes: ["id", "name", "price", "image"],
+          attributes: ["id", "name", "price", "images"],
         },
         {
           model: Category,
@@ -107,7 +107,7 @@ const getAllHeroes = async (filters = {}) => {
         {
           model: Product,
           as: "product",
-          attributes: ["id", "name", "price", "image", "stock", "status"],
+          attributes: ["id", "name", "price", "images", "stock", "status"],
         },
         {
           model: Category,
@@ -143,7 +143,7 @@ const getActiveHeroes = async () => {
         {
           model: Product,
           as: "product",
-          attributes: ["id", "name", "price", "image", "stock", "status"],
+          attributes: ["id", "name", "price", "images", "stock", "status"],
         },
         {
           model: Category,
@@ -168,7 +168,7 @@ const getHeroById = async (heroId) => {
         {
           model: Product,
           as: "product",
-          attributes: ["id", "name", "price", "image", "description"],
+          attributes: ["id", "name", "price", "images", "description"],
         },
         {
           model: Category,
@@ -244,7 +244,7 @@ const updateHero = async (heroId, data) => {
         {
           model: Product,
           as: "product",
-          attributes: ["id", "name", "price", "image"],
+          attributes: ["id", "name", "price", "images"],
         },
         {
           model: Category,

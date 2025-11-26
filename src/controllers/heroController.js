@@ -40,7 +40,7 @@ exports.getAllHeroes = catchAsyncError(async (req, res) => {
       true,
       "Hero slides fetched successfully",
       data,
-      false
+      true
     );
   } catch (error) {
     handleError(res, error);
@@ -57,7 +57,7 @@ exports.getActiveHeroes = catchAsyncError(async (req, res) => {
       true,
       "Active hero slides fetched successfully",
       data,
-      false
+      true
     );
   } catch (error) {
     handleError(res, error);
