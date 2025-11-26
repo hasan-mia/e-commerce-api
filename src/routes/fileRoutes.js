@@ -13,30 +13,63 @@ fileRouter.post("/upload", isAuthenticated, async (req, res) => {
     }
 
     const cloudinaryService = new CloudinaryService();
-    const data = await cloudinaryService.uploadFile(req.files.file);
+    const files = req.files.file;
 
-    if (process.env.NODE_ENV !== "production") {
-      console.log("Cloudinary response:", data);
-    }
+    // Check if single file or multiple files
+    const isSingleFile = !Array.isArray(files);
 
-    const fileUrl = data.secure_url || data.url;
-    if (!fileUrl) {
+    if (isSingleFile) {
+      // Handle single file upload
+      const data = await cloudinaryService.uploadFile(files);
+
+      if (process.env.NODE_ENV !== "production") {
+        console.log("Cloudinary response:", data);
+      }
+
+      const fileUrl = data.secure_url || data.url;
+      if (!fileUrl) {
+        return sendResponse(
+          res,
+          500,
+          false,
+          "Cloudinary did not return a file URL"
+        );
+      }
+
       return sendResponse(
         res,
-        500,
-        false,
-        "Cloudinary did not return a file URL"
+        200,
+        true,
+        "File uploaded successfully",
+        fileUrl,
+        true
+      );
+    } else {
+      // Handle multiple files upload
+      const uploadResults = await cloudinaryService.uploadMultipleFiles(files);
+
+      if (process.env.NODE_ENV !== "production") {
+        console.log("Cloudinary responses:", uploadResults);
+      }
+
+      // Extract URLs from results
+      const fileUrls = uploadResults.map((data) => {
+        const fileUrl = data.secure_url || data.url;
+        if (!fileUrl) {
+          throw new Error("Cloudinary did not return a file URL");
+        }
+        return fileUrl;
+      });
+
+      return sendResponse(
+        res,
+        200,
+        true,
+        `${fileUrls.length} file(s) uploaded successfully`,
+        fileUrls,
+        true
       );
     }
-
-    return sendResponse(
-      res,
-      200,
-      true,
-      "File uploaded successfully",
-      fileUrl,
-      true
-    );
   } catch (error) {
     console.error("File upload error:", error);
 

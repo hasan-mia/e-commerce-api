@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         references: { model: "roles", key: "id" },
       },
+      address: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null,
+      },
     },
     {
       tableName: "users",

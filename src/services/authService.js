@@ -358,8 +358,17 @@ const getProfile = async (userId) => {
       });
     }
 
+    // Convert user to plain object
+    const userObject = user.toJSON();
+
+    // Extract role name and remove the role object
+    const roleName = userObject.role ? userObject.role.name : null;
+    delete userObject.role;
+
+    // Build the result with role as string
     const result = {
-      ...user.toJSON(),
+      ...userObject,
+      role: roleName,
       permissions,
     };
 
@@ -368,7 +377,6 @@ const getProfile = async (userId) => {
     throw new ErrorHandler(error.message, error.statusCode || 500);
   }
 };
-
 module.exports = {
   registerUser,
   loginUser,

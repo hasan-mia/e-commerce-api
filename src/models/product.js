@@ -36,9 +36,20 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      image: {
-        type: DataTypes.STRING(255),
+      images: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
         allowNull: true,
+        defaultValue: [],
+        validate: {
+          isValidArray(value) {
+            if (value && !Array.isArray(value)) {
+              throw new Error("Image must be an array of strings");
+            }
+            if (value && value.length > 10) {
+              throw new Error("Maximum 10 images allowed");
+            }
+          },
+        },
       },
       category_id: {
         type: DataTypes.UUID,

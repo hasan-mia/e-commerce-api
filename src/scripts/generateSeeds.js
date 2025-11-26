@@ -79,7 +79,7 @@ const generateSeeds = async () => {
         description:
           "Powerful laptop with M3 Pro chip, 16GB RAM, and stunning Retina display. Perfect for professionals and creators.",
         price: 1999,
-        image: "/macbook-pro.jpg",
+        image: ["/macbook-pro.jpg", "/macbook-pro-2.jpg", "/macbook-pro-3.jpg"],
         category_id: categories["Laptops"].id,
         stock: 15,
         rating: 4.8,
@@ -92,7 +92,7 @@ const generateSeeds = async () => {
         description:
           "Ultra-compact and lightweight laptop with Intel Core i7, perfect for professionals on the go.",
         price: 1299,
-        image: "/dell-xps.jpg",
+        image: ["/dell-xps.jpg", "/dell-xps-2.jpg"],
         category_id: categories["Laptops"].id,
         stock: 8,
         rating: 4.6,
@@ -105,7 +105,12 @@ const generateSeeds = async () => {
         description:
           "Latest iPhone with titanium design, A17 Pro chip, and advanced camera system with 5x optical zoom.",
         price: 999,
-        image: "/iphone-15.jpg",
+        image: [
+          "/iphone-15.jpg",
+          "/iphone-15-2.jpg",
+          "/iphone-15-3.jpg",
+          "/iphone-15-4.jpg",
+        ],
         category_id: categories["Smartphones"].id,
         stock: 25,
         rating: 4.9,
@@ -118,7 +123,11 @@ const generateSeeds = async () => {
         description:
           "High-end Android smartphone with AI features, amazing display, and professional-grade cameras.",
         price: 899,
-        image: "/samsung-galaxy.jpg",
+        image: [
+          "/samsung-galaxy.jpg",
+          "/samsung-galaxy-2.jpg",
+          "/samsung-galaxy-3.jpg",
+        ],
         category_id: categories["Smartphones"].id,
         stock: 18,
         rating: 4.7,
@@ -131,7 +140,7 @@ const generateSeeds = async () => {
         description:
           "Versatile tablet for work and creativity with M1 chip, Apple Pencil support, and all-day battery.",
         price: 599,
-        image: "/ipad-air.jpg",
+        image: ["/ipad-air.jpg", "/ipad-air-2.jpg"],
         category_id: categories["Tablets"].id,
         stock: 12,
         rating: 4.7,
@@ -144,7 +153,10 @@ const generateSeeds = async () => {
         description:
           "Studio-quality noise-canceling headphones with spatial audio and 30-hour battery life.",
         price: 299,
-        image: "/diverse-people-listening-headphones.png",
+        image: [
+          "/diverse-people-listening-headphones.png",
+          "/headphones-2.jpg",
+        ],
         category_id: categories["Accessories"].id,
         stock: 30,
         rating: 4.5,
@@ -157,7 +169,7 @@ const generateSeeds = async () => {
         description:
           "Multi-port USB-C adapter with HDMI, USB 3.0, SD card reader, and 100W power delivery.",
         price: 79,
-        image: "/usb-hub.png",
+        image: ["/usb-hub.png"],
         category_id: categories["Accessories"].id,
         stock: 50,
         rating: 4.4,
@@ -170,7 +182,11 @@ const generateSeeds = async () => {
         description:
           "RGB mechanical keyboard with hot-swappable switches, premium build quality, and programmable keys.",
         price: 149,
-        image: "/mechanical-keyboard.png",
+        image: [
+          "/mechanical-keyboard.png",
+          "/mechanical-keyboard-2.jpg",
+          "/mechanical-keyboard-3.jpg",
+        ],
         category_id: categories["Accessories"].id,
         stock: 20,
         rating: 4.6,

@@ -24,7 +24,7 @@ exports.register = catchAsyncError(async (req, res) => {
       email: user.email,
       name: user.name,
       role_id: user.role_id,
-      role: user.role,
+      role: user.role.name || "USER",
       avatar: user.avatar,
     };
 
@@ -61,7 +61,7 @@ exports.login = catchAsyncError(async (req, res) => {
       email: user.email,
       name: user.name,
       role_id: user.role_id,
-      role: user.role,
+      role: user.role.name || "USER",
       avatar: user.avatar,
     };
 

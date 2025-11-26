@@ -7,7 +7,7 @@ const { Op } = require("sequelize");
 // Create Product
 const createProduct = async (data) => {
   try {
-    const { name, description, price, category_id, stock, image } = data;
+    const { name, description, price, category_id, stock, images } = data;
 
     if (!name || !price || !category_id) {
       throw new ErrorHandler(
@@ -35,13 +35,19 @@ const createProduct = async (data) => {
       );
     }
 
+    // Ensure image is an array
+    let imageArray = [];
+    if (images) {
+      imageArray = Array.isArray(images) ? images : [images];
+    }
+
     const product = await Product.create({
       name,
       description,
       price,
       category_id,
       stock: stock || 0,
-      image,
+      images: imageArray,
       rating: 0,
       reviews: 0,
       status: stock > 0 ? "active" : "out_of_stock",
@@ -195,14 +201,38 @@ const updateProduct = async (productId, data) => {
       }
     }
 
-    // Delete existing image if updating image
-    if (data?.image && product?.image && product?.image !== data?.image) {
-      const publicKey = await extractPublicIdFromUrl(product?.image);
-      const cloudinaryService = new CloudinaryService();
-      const deleted = await cloudinaryService.deleteFile(publicKey);
-      if (!deleted) {
-        throw new ErrorHandler("Failed to delete old image", 400);
+    // Handle image updates
+    if (data?.images) {
+      // Ensure new image is an array
+      const newImages = Array.isArray(data.images)
+        ? data.images
+        : [data.images];
+
+      // Delete old images from cloudinary if they exist
+      if (
+        product?.images &&
+        Array.isArray(product.images) &&
+        product.images.length > 0
+      ) {
+        const cloudinaryService = new CloudinaryService();
+
+        // Find images to delete (old images not in new images)
+        const imagesToDelete = product.images.filter(
+          (oldImg) => !newImages.includes(oldImg)
+        );
+
+        // Delete each old image
+        for (const imageUrl of imagesToDelete) {
+          try {
+            const publicKey = await extractPublicIdFromUrl(imageUrl);
+            await cloudinaryService.deleteFile(publicKey);
+          } catch (err) {
+            console.error(`Failed to delete image: ${imageUrl}`, err);
+          }
+        }
       }
+
+      data.image = newImages;
     }
 
     // Auto-update status based on stock
@@ -264,11 +294,22 @@ const deleteProduct = async (productId) => {
       );
     }
 
-    // Delete image from cloudinary if exists
-    if (product?.image) {
-      const publicKey = await extractPublicIdFromUrl(product?.image);
+    // Delete all images from cloudinary if they exist
+    if (
+      product?.image &&
+      Array.isArray(product.image) &&
+      product.image.length > 0
+    ) {
       const cloudinaryService = new CloudinaryService();
-      await cloudinaryService.deleteFile(publicKey);
+
+      for (const imageUrl of product.image) {
+        try {
+          const publicKey = await extractPublicIdFromUrl(imageUrl);
+          await cloudinaryService.deleteFile(publicKey);
+        } catch (err) {
+          console.error(`Failed to delete image: ${imageUrl}`, err);
+        }
+      }
     }
 
     await product.destroy();

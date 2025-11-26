@@ -20,9 +20,10 @@ module.exports = {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
-      image: {
-        type: Sequelize.STRING(255),
+      images: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
         allowNull: true,
+        defaultValue: [],
       },
       category_id: {
         type: Sequelize.UUID,

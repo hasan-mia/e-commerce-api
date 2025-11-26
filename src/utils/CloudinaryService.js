@@ -38,6 +38,31 @@ class CloudinaryService {
   }
 
   /**
+   * Upload multiple files to Cloudinary (converts images to WebP)
+   * @param {Array|fileUpload.UploadedFile} files - Single file or array of files
+   * @returns {Promise<Array>} Array of upload results
+   */
+  async uploadMultipleFiles(files) {
+    try {
+      // Convert single file to array for consistent handling
+      const fileArray = Array.isArray(files) ? files : [files];
+
+      // Validate file limit (optional - adjust as needed)
+      if (fileArray.length > 10) {
+        throw new Error("Maximum 10 files allowed per upload");
+      }
+
+      // Upload all files in parallel
+      const uploadPromises = fileArray.map((file) => this.uploadFile(file));
+      const results = await Promise.all(uploadPromises);
+
+      return results;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  /**
    * Upload video to Cloudinary with transformations
    * @param {fileUpload.UploadedFile} file - The uploaded video file
    * @returns {Promise} Upload result
