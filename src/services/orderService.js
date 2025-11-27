@@ -5,6 +5,7 @@ const {
   User,
   Transaction,
   sequelize,
+  Address,
 } = require("../models");
 const { ErrorHandler } = require("../utils/utils");
 const { Op } = require("sequelize");
@@ -14,13 +15,13 @@ const createOrder = async (userId, data) => {
   const transaction = await sequelize.transaction();
 
   try {
-    const { items, payment_method, shipping_address, notes } = data;
+    const { items, payment_method, address_id, notes } = data;
 
     if (!items || items.length === 0) {
       throw new ErrorHandler("Order must contain at least one item", 400);
     }
 
-    if (!payment_method || !shipping_address) {
+    if (!payment_method || !address_id) {
       throw new ErrorHandler(
         "Payment method and shipping address are required",
         400
@@ -31,6 +32,12 @@ const createOrder = async (userId, data) => {
     const user = await User.findByPk(userId);
     if (!user) {
       throw new ErrorHandler("User not found", 404);
+    }
+
+    // Verify address exists
+    const address = await Address.findByPk(address_id);
+    if (!address) {
+      throw new ErrorHandler("Address not found", 404);
     }
 
     let totalAmount = 0;
@@ -80,14 +87,14 @@ const createOrder = async (userId, data) => {
       );
     }
 
-    // Create order
+    // Create order with address snapshot
     const order = await Order.create(
       {
         user_id: userId,
         status: "PENDING",
         payment_method,
         total_amount: totalAmount,
-        shipping_address,
+        shipping_address: `${address.address}, ${address.city}, ${address.state}, ${address.zip}`, // snapshot
         notes,
       },
       { transaction }
@@ -117,7 +124,8 @@ const createOrder = async (userId, data) => {
 
     await transaction.commit();
 
-    // Fetch complete order
+    // Fetch complete order AFTER commit (outside transaction)
+    // If this fails, the transaction is already committed, so we don't rollback
     const completeOrder = await Order.findByPk(order.id, {
       include: [
         {
@@ -127,7 +135,7 @@ const createOrder = async (userId, data) => {
             {
               model: Product,
               as: "product",
-              attributes: ["id", "name", "image", "price"],
+              attributes: ["id", "name", "images", "price"],
             },
           ],
         },
@@ -140,7 +148,11 @@ const createOrder = async (userId, data) => {
 
     return completeOrder;
   } catch (error) {
-    await transaction.rollback();
+    // Only rollback if transaction hasn't been committed yet
+    if (!transaction.finished) {
+      await transaction.rollback();
+    }
+
     if (
       error.name === "SequelizeValidationError" ||
       error.name === "SequelizeUniqueConstraintError"
@@ -198,7 +210,7 @@ const getAllOrders = async (filters = {}) => {
             {
               model: Product,
               as: "product",
-              attributes: ["id", "name", "image", "price"],
+              attributes: ["id", "name", "images", "price"],
             },
           ],
         },
@@ -255,7 +267,7 @@ const getUserOrders = async (userId, filters = {}) => {
             {
               model: Product,
               as: "product",
-              attributes: ["id", "name", "image", "price"],
+              attributes: ["id", "name", "images", "price"],
             },
           ],
         },
@@ -312,7 +324,7 @@ const getOrderById = async (orderId, userId = null, isAdmin = false) => {
                 "id",
                 "name",
                 "description",
-                "image",
+                "images",
                 "price",
                 "stock",
               ],
@@ -402,7 +414,7 @@ const updateOrderStatus = async (orderId, status, tracking_number = null) => {
             {
               model: Product,
               as: "product",
-              attributes: ["id", "name", "image", "price"],
+              attributes: ["id", "name", "images", "price"],
             },
           ],
         },
@@ -494,7 +506,7 @@ const cancelOrder = async (orderId, userId = null, isAdmin = false) => {
             {
               model: Product,
               as: "product",
-              attributes: ["id", "name", "image", "price"],
+              attributes: ["id", "name", "images", "price"],
             },
           ],
         },

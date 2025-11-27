@@ -1,6 +1,6 @@
 const express = require("express");
 const orderRouter = express.Router();
-const { isAuthorized } = require("../middleware/auth");
+const { isAuthorized, isAuthenticated } = require("../middleware/auth");
 const {
   createOrder,
   getAllOrders,
@@ -11,11 +11,11 @@ const {
 } = require("../controllers/orderController");
 
 orderRouter
-  .post("/", isAuthorized("create_order"), createOrder)
+  .post("/", isAuthenticated, createOrder)
   .get("/", isAuthorized("manage_orders"), getAllOrders)
-  .get("/my-orders", isAuthorized("view_own_orders"), getUserOrders)
-  .get("/:id", isAuthorized("view_order"), getOrderById)
+  .get("/my-orders", isAuthenticated, getUserOrders)
+  .get("/:id", isAuthenticated, getOrderById)
   .patch("/:id/status", isAuthorized("manage_orders"), updateOrderStatus)
-  .post("/:id/cancel", isAuthorized("cancel_order"), cancelOrder);
+  .post("/:id/cancel", isAuthorized("manage_orders"), cancelOrder);
 
 module.exports = orderRouter;

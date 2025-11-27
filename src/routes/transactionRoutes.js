@@ -20,12 +20,12 @@ transactionRouter
     isAuthorized("view_own_transactions"),
     getUserTransactions
   )
-  .get("/:id", isAuthorized("view_transaction"), getTransactionById)
+  .get("/:id", isAuthorized("manage_transactions"), getTransactionById)
   .patch(
     "/:id/status",
     isAuthorized("manage_transactions"),
     updateTransactionStatus
   )
-  .post("/:id/process", isAuthorized("process_payment"), processPayment);
+  .post("/:id/process", isAuthorized("manage_transactions"), processPayment);
 
 module.exports = transactionRouter;

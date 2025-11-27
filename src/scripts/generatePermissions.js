@@ -16,11 +16,13 @@ const permissions = [
   { module: "admin", action: "delete_admin", required_score: 50 },
 
   // ============================================
-  // ADDRESS INFO PERMISSIONS
+  // OTHERS PERMISSIONS
   // ============================================
-  { module: "address", action: "view_address", required_score: 0 },
-  { module: "address", action: "manage_address", required_score: 0 },
-  { module: "address", action: "delete_address", required_score: 0 },
+  { module: "categories", action: "manage_categories", required_score: 50 },
+  { module: "heroes", action: "manage_heroes", required_score: 50 },
+  { module: "orders", action: "manage_orders", required_score: 50 },
+  { module: "products", action: "manage_products", required_score: 50 },
+  { module: "transactions", action: "manage_transactions", required_score: 50 },
 ];
 
 module.exports = permissions;
