@@ -23,6 +23,7 @@ const permissions = [
   { module: "orders", action: "manage_orders", required_score: 50 },
   { module: "products", action: "manage_products", required_score: 50 },
   { module: "transactions", action: "manage_transactions", required_score: 50 },
+  { module: "users", action: "manage_users", required_score: 50 },
 ];
 
 module.exports = permissions;

@@ -6,6 +6,7 @@ const {
   getProfile,
   forgotPassword,
   updateProfile,
+  getAllUsers,
 } = require("../services/authService");
 
 const catchAsyncError = require("../middleware/catchAsyncError");
@@ -162,13 +163,24 @@ exports.updateProfile = catchAsyncError(async (req, res) => {
   }
 });
 
-// Get Current User Profile Controller
+// Get Current User
 exports.getProfile = catchAsyncError(async (req, res) => {
   try {
     const userId = req.user.id;
     const data = await getProfile(userId);
 
     sendResponse(res, 200, true, "Profile retrieved successfully", data, true);
+  } catch (error) {
+    handleError(res, error);
+  }
+});
+
+// Get all User
+exports.getAllUsers = catchAsyncError(async (req, res) => {
+  try {
+    const data = await getAllUsers(req.query);
+
+    sendResponse(res, 200, true, "Users retrieved successfully", data, false);
   } catch (error) {
     handleError(res, error);
   }

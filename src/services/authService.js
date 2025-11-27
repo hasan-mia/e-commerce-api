@@ -377,6 +377,78 @@ const getProfile = async (userId) => {
     throw new ErrorHandler(error.message, error.statusCode || 500);
   }
 };
+
+// Get all user
+const getAllUsers = async (filters = {}) => {
+  try {
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      role_id,
+      start_date,
+      end_date,
+      sortBy = "created_at",
+      sortOrder = "DESC",
+    } = filters;
+
+    const offset = (page - 1) * limit;
+    const whereClause = {};
+
+    // --- Search filter ---
+    if (search) {
+      whereClause[Op.or] = [
+        { name: { [Op.iLike]: `%${search}%` } },
+        { email: { [Op.iLike]: `%${search}%` } },
+        { phone: { [Op.iLike]: `%${search}%` } },
+      ];
+    }
+
+    // --- Role filter ---
+    if (role_id) {
+      whereClause.role_id = role_id;
+    }
+
+    // --- Date range filter ---
+    if (start_date || end_date) {
+      whereClause.created_at = {};
+      if (start_date) whereClause.created_at[Op.gte] = new Date(start_date);
+      if (end_date) whereClause.created_at[Op.lte] = new Date(end_date);
+    }
+
+    // --- Query DB ---
+    const { count, rows } = await User.findAndCountAll({
+      where: whereClause,
+      include: [
+        {
+          model: Role,
+          as: "role",
+          attributes: ["id", "name", "score", "description"],
+        },
+      ],
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [[sortBy, sortOrder.toUpperCase()]],
+      attributes: {
+        exclude: ["password"], // Hide sensitive info
+      },
+    });
+
+    // --- Final response ---
+    return {
+      users: rows,
+      pagination: {
+        total: count,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        totalPages: Math.ceil(count / limit),
+      },
+    };
+  } catch (error) {
+    throw new ErrorHandler(error.message, error.statusCode || 500);
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -385,4 +457,5 @@ module.exports = {
   resetPassword,
   updateProfile,
   getProfile,
+  getAllUsers,
 };

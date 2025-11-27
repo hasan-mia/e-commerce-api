@@ -1,6 +1,6 @@
 const express = require("express");
 const authRouter = express.Router();
-const { isAuthenticated } = require("../middleware/auth");
+const { isAuthenticated, isAuthorized } = require("../middleware/auth");
 const otpRateLimiter = require("../middleware/otpRateLimiter");
 const {
   register,
@@ -10,6 +10,7 @@ const {
   forgotPassword,
   getProfile,
   updateProfile,
+  getAllUsers,
 } = require("../controllers/authController");
 
 /*============================================
@@ -29,6 +30,7 @@ authRouter
   .post("/reset-password", isAuthenticated, resetPassword)
   .post("/change-password", isAuthenticated, changePassword)
   .get("/me", isAuthenticated, getProfile)
-  .put("/profile", isAuthenticated, updateProfile);
+  .put("/profile", isAuthenticated, updateProfile)
+  .get("/users", isAuthorized("manage_users"), getAllUsers);
 
 module.exports = authRouter;
