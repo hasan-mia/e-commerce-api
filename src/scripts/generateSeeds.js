@@ -36,25 +36,25 @@ const generateSeeds = async () => {
         id: uuidv4(),
         name: "Laptops",
         description: "High-performance laptops for every need",
-        image: "/modern-laptop-workspace.png",
+        icon: "/modern-laptop-workspace.png",
       },
       {
         id: uuidv4(),
         name: "Smartphones",
         description: "Latest smartphones and mobile devices",
-        image: "/modern-smartphone.png",
+        icon: "/modern-smartphone.png",
       },
       {
         id: uuidv4(),
         name: "Tablets",
         description: "Portable tablets for productivity",
-        image: "/modern-tablet-display.png",
+        icon: "/modern-tablet-display.png",
       },
       {
         id: uuidv4(),
         name: "Accessories",
         description: "Tech accessories and peripherals",
-        image: "/fashion-accessories-flatlay.png",
+        icon: "/fashion-accessories-flatlay.png",
       },
     ];
 

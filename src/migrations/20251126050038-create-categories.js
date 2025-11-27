@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      image: {
+      icon: {
         type: Sequelize.STRING(255),
         allowNull: true,
       },

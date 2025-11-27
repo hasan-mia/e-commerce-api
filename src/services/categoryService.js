@@ -56,7 +56,7 @@ const getAllCategories = async (filters = {}) => {
   try {
     const {
       page = 1,
-      limit = 10,
+      limit = 100,
       search,
       sortBy = "created_at",
       sortOrder = "DESC",
@@ -75,13 +75,7 @@ const getAllCategories = async (filters = {}) => {
 
     const { count, rows } = await Category.findAndCountAll({
       where: whereClause,
-      include: [
-        {
-          model: Product,
-          as: "products",
-          attributes: ["id", "name", "price", "stock"],
-        },
-      ],
+      attributes: { exclude: ["createdAt", "updatedAt"] },
       limit: parseInt(limit),
       offset: parseInt(offset),
       order: [[sortBy, sortOrder.toUpperCase()]],

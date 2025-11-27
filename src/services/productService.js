@@ -59,7 +59,7 @@ const createProduct = async (data) => {
         {
           model: Category,
           as: "category",
-          attributes: ["id", "name", "description", "image"],
+          attributes: ["id", "name", "description", "icon"],
         },
       ],
     });
@@ -126,7 +126,7 @@ const getAllProducts = async (filters = {}) => {
         {
           model: Category,
           as: "category",
-          attributes: ["id", "name", "description", "image"],
+          attributes: ["id", "name", "description", "icon"],
         },
       ],
       limit: parseInt(limit),
@@ -156,7 +156,7 @@ const getProductById = async (productId) => {
         {
           model: Category,
           as: "category",
-          attributes: ["id", "name", "description", "image"],
+          attributes: ["id", "name", "description", "icon"],
         },
       ],
     });
@@ -252,7 +252,7 @@ const updateProduct = async (productId, data) => {
         {
           model: Category,
           as: "category",
-          attributes: ["id", "name", "description", "image"],
+          attributes: ["id", "name", "description", "icon"],
         },
       ],
     });
@@ -358,8 +358,6 @@ const updateStock = async (productId, quantity, operation = "add") => {
   }
 };
 
-// Add these new functions to your productService.js
-
 // Get Best Sellers (based on order items count)
 const getBestSellers = async (filters = {}) => {
   try {
@@ -382,7 +380,7 @@ const getBestSellers = async (filters = {}) => {
         [
           sequelize.literal(`(
             SELECT COALESCE(SUM(quantity), 0)
-            FROM "OrderItems" AS oi
+            FROM "order_items" AS oi
             WHERE oi.product_id = "Product".id
           )`),
           "total_sold",
@@ -392,7 +390,7 @@ const getBestSellers = async (filters = {}) => {
         {
           model: Category,
           as: "category",
-          attributes: ["id", "name", "description", "image"],
+          attributes: ["id", "name", "description", "icon"],
         },
       ],
       where: {
@@ -421,7 +419,7 @@ const getNewArrivals = async (filters = {}) => {
         {
           model: Category,
           as: "category",
-          attributes: ["id", "name", "description", "image"],
+          attributes: ["id", "name", "description", "icon"],
         },
       ],
       limit: parseInt(limit),

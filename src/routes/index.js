@@ -3,6 +3,7 @@ const router = express.Router();
 
 const fileRouter = require("./fileRoutes");
 const authRouter = require("./authRoutes");
+const addressRouter = require("./addressRoutes");
 const roleRouter = require("./roleRoutes");
 const heroRouter = require("./heroRoutes");
 const categoryRouter = require("./categoryRoutes");
@@ -13,6 +14,7 @@ const transactionRouter = require("./transactionRoutes");
 // File Route
 router.use("/file", fileRouter);
 router.use("/auth", authRouter);
+router.use("/address", addressRouter);
 router.use("/roles", roleRouter);
 
 // Other Routes
