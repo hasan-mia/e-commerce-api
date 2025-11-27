@@ -15,7 +15,7 @@ orderRouter
   .get("/", isAuthorized("manage_orders"), getAllOrders)
   .get("/my-orders", isAuthenticated, getUserOrders)
   .get("/:id", isAuthenticated, getOrderById)
-  .patch("/:id/status", isAuthorized("manage_orders"), updateOrderStatus)
+  .put("/:id/status", isAuthorized("manage_orders"), updateOrderStatus)
   .post("/:id/cancel", isAuthorized("manage_orders"), cancelOrder);
 
 module.exports = orderRouter;

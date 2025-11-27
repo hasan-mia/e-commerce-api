@@ -4,6 +4,7 @@ const {
   createCategory,
   getAllCategories,
   getCategoryById,
+  updateCategory,
   deleteCategory,
 } = require("../services/categoryService");
 

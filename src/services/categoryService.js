@@ -7,7 +7,7 @@ const { Op } = require("sequelize");
 // Create Category
 const createCategory = async (data) => {
   try {
-    const { name, description, image } = data;
+    const { name, description, icon } = data;
 
     if (!name) {
       throw new ErrorHandler("Category name is required", 400);
@@ -35,7 +35,7 @@ const createCategory = async (data) => {
     const category = await Category.create({
       name,
       description,
-      image,
+      icon,
     });
 
     return category;
